@@ -17,16 +17,9 @@ public class Tests {
 	}
 	
 	public Tests() {
-String page = Page.getPage("http://www.mediavida.com/foro/9/java-mv6lib-accede-mv6-desde-tu-aplicacion-367539");
-Vector<Post> posts = new Vector<Post>();
-for(int i = 1; i <= 14; i++) {
-	posts.add(new Post(367539, i, page));
-}
-		
-for(int i = 0; i < posts.size(); i++) {
-	Post postActual = posts.get(i);
-	postActual.refreshPost(); // Como ya le hemos dado la p‡gina, no la vuelve a cargar
-	System.out.println("#" + postActual.getPostId() + " " +postActual.getAuthor());
-}
+		Vector<Post> p = new Thread(351952).getPosts(25, 35);
+		for(int i = 0; i < p.size(); i++) {
+			System.out.println(p.get(i).getThreadId() + " #" + p.get(i).getPostId() + " por " + p.get(i).getAuthor());
+		}
 	}
 }

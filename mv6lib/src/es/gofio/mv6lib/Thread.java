@@ -11,6 +11,7 @@ package es.gofio.mv6lib;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -129,6 +130,32 @@ public class Thread {
 	 * @return Returns the forum's name without the need of call the method Forum.getName()
 	 */
 	public String getForumName() { return this._forumName; }
+	
+	/**
+	 * This method retrieves posts among different pages.
+	 * @param from The id of the first post to retrieve.
+	 * @param to The id of the last post to retrieve.
+	 * @return Returns a Vector<Post> with the updated information.
+	 */
+	public Vector<Post> getPosts(int from, int to) {
+		if(to >= from && from > 0 && to > 0) {
+			Vector<Post> posts = new Vector<Post>();
+			int lastPage = 0;
+			String page = null;
+			for(int i = from; i <= to; i++) {
+				int nextPage = ((i-1) / 30)+1;
+				if(nextPage != lastPage) {
+					page = Page.getPage("http://www.mediavida.com/foro/1/mv6lib-" + this._id + "/" + nextPage);
+					lastPage = nextPage;
+				}
+				Post newPost = new Post(Integer.parseInt(this._id), i, page);
+				newPost.refreshPost();
+				posts.add(newPost);
+			}
+			return posts;
+		}
+		return null;
+	}
 	
 	//public Category getCategory() { return this._category; }
 	
