@@ -1,10 +1,7 @@
 package es.gofio.mv6lib.tests;
 
-import java.util.Vector;
-
-import es.gofio.mv6lib.Post;
-import es.gofio.mv6lib.Thread;
-import es.gofio.mv6lib.utils.Page;
+import es.gofio.mv6lib.Member;
+import es.gofio.mv6lib.Singleton;
 
 public class Tests {
 
@@ -17,9 +14,7 @@ public class Tests {
 	}
 	
 	public Tests() {
-		Vector<Post> p = new Thread(351952).getPosts(25, 35);
-		for(int i = 0; i < p.size(); i++) {
-			System.out.println(p.get(i).getThreadId() + " #" + p.get(i).getPostId() + " por " + p.get(i).getAuthor());
-		}
+		System.out.println(Singleton.getInstance().getMember("PiradoIV").getNick());
+		System.out.println(Singleton.getInstance().getPost(367539,2).getAuthor());
 	}
 }
