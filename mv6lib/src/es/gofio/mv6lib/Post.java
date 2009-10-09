@@ -78,37 +78,72 @@ public class Post {
 	/**
 	 * @return Returns the ID of the Thread.
 	 */
-	public int getThreadId() { return this._threadId; }
+	public int getThreadId() {
+		if(this._threadPage == null) {
+			refreshPost();
+		}
+		return this._threadId;
+	}
 	
 	/**
 	 * @return Returns the ID of the Post.
 	 */
-	public int getPostId() { return this._postId; }
+	public int getPostId() {
+		if(this._threadPage == null) {
+			refreshPost();
+		}
+		return this._postId;
+	}
 	
 	/**
 	 * @return Returns the ID of the Forum.
 	 */
-	public int getForumId() { return this._forumId; }
+	public int getForumId() {
+		if(this._threadPage == null) {
+			refreshPost();
+		}
+		return this._forumId;
+	}
 	
 	/**
 	 * @return Returns the creation timestamp of the Post.
 	 */
-	public long getTimestamp() { return this._timestamp; }
+	public long getTimestamp() {
+		if(this._threadPage == null) {
+			refreshPost();
+		}
+		return this._timestamp;
+	}
 	
 	/**
 	 * @return Returns the content of the Post.
 	 */
-	public String getPost() { return this._post; }
+	public String getPost() {
+		if(this._threadPage == null) {
+			refreshPost();
+		}
+		return this._post;
+	}
 	
 	/**
 	 * @return Returns the content of the Post, without the most of the HTML code.
 	 */
-	public String getPostWithoutHtml() { return getCleanPost(); }
+	public String getPostWithoutHtml() {
+		if(this._threadPage == null) {
+			refreshPost();
+		}
+		return getCleanPost();
+	}
 	
 	/**
 	 * @return Returns the ID of the Member.
 	 */
-	public String getAuthor() { return this._author; }
+	public String getAuthor() {
+		if(this._threadPage == null) {
+			refreshPost();
+		}
+		return this._author;
+	}
 	
 	private void setPage() {
 		if(this._postId <= 30) {

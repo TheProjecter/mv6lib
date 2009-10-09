@@ -43,6 +43,9 @@ public class ForumList {
 	 * @return Returns a vector with the forum list.
 	 */
 	public Vector<Forum> getForumList() {
+		if(this._page == null) {
+			updateForumList();
+		}
 		return this._forumList;
 	}
 	

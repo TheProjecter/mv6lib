@@ -36,7 +36,7 @@ public class Stats {
 	private int		_members;
 	private int		_threads;
 	private int		_posts;
-	private String	_page = "";
+	private String	_page;
 	
 	/**
 	 * Constructor of the class, you must call the updateStats() method to retrieve the stats.
@@ -51,6 +51,9 @@ public class Stats {
 	 * @return long with timestamp in milliseconds.
 	 */
 	public long getTimestamp() {
+		if(this._page == null) {
+			updateStats();
+		}
 		return _timestamp;
 	}
 	
@@ -59,6 +62,9 @@ public class Stats {
 	 * @return int with the current number of online users.
 	 */
 	public int getUsersOnline() {
+		if(this._page == null) {
+			updateStats();
+		}
 		return _usersOnline;
 	}
 	
@@ -67,6 +73,9 @@ public class Stats {
 	 * @return int with the current number of registered users.
 	 */
 	public int getMembersCount() {
+		if(this._page == null) {
+			updateStats();
+		}
 		return _members;
 	}
 	
@@ -75,6 +84,9 @@ public class Stats {
 	 * @return int with the quantity of threads.
 	 */
 	public int getThreadsCount() {
+		if(this._page == null) {
+			updateStats();
+		}
 		return _threads;
 	}
 	
@@ -83,6 +95,9 @@ public class Stats {
 	 * @return int with the quantity of posts.
 	 */
 	public int getPostsCount() {
+		if(this._page == null) {
+			updateStats();
+		}
 		return _posts;
 	}
 	

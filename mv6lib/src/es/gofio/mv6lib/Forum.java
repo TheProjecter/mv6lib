@@ -63,12 +63,22 @@ public class Forum {
 	/**
 	 * @return Returns the name of the forum.
 	 */
-	public String getForumName() { return this._name; }
+	public String getForumName() {
+		if(this._name == null) {
+			refreshForum();
+		}
+		return this._name;
+	}
 	
 	/**
 	 * @return Returns a Vector of the last 30 (more or less) threads.
 	 */
-	public Vector<Thread> getLastThreads() { return this._lastThreads; }
+	public Vector<Thread> getLastThreads() {
+		if(this._page == null) {
+			refreshForum();
+		}
+		return this._lastThreads;
+	}
 	
 	/**
 	 * Forces the class to refresh the content.

@@ -1,7 +1,10 @@
 package es.gofio.mv6lib.tests;
 
-import es.gofio.mv6lib.Member;
+import java.util.Vector;
+
+import es.gofio.mv6lib.Post;
 import es.gofio.mv6lib.Singleton;
+import es.gofio.mv6lib.Thread;
 
 public class Tests {
 
@@ -14,7 +17,15 @@ public class Tests {
 	}
 	
 	public Tests() {
-		System.out.println(Singleton.getInstance().getMember("PiradoIV").getNick());
-		System.out.println(Singleton.getInstance().getPost(367539,2).getAuthor());
+		long startTime = System.currentTimeMillis();
+		
+		Thread t = Singleton.getInstance().getThread(367662);
+		Vector<Post> p = Singleton.getInstance().getPost(Integer.parseInt(t.getId()), 1, t.getRepliesCount());
+		
+		for(int i = 0; i < p.size(); i++) {
+			System.out.println("#" + p.get(i).getPostId() + " por " + p.get(i).getAuthor());
+		}
+		
+		System.out.println("\nTiempo empleado: " + (System.currentTimeMillis() - startTime) + "ms");
 	}
 }

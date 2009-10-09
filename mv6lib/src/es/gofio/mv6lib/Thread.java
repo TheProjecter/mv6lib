@@ -89,47 +89,92 @@ public class Thread {
 	/**
 	 * @return Returns the ID of the Thread.
 	 */
-	public String getId() { return this._id; }
+	public String getId() {
+		if(this._threadPage == null) {
+			refreshThread();
+		}
+		return this._id;
+	}
 	
 	/** 
 	 * @return Returns the timestamp (in milliseconds) of the thread's creation time.
 	 */
-	public long getTimestamp() { return this._timestamp; }
+	public long getTimestamp() {
+		if(this._threadPage == null) {
+			refreshThread();
+		}
+		return this._timestamp;
+	}
 	
 	/**
 	 * @return Returns the ID of the parent forum.
 	 */
-	public int getForumId() { return this._forumId; }
+	public int getForumId() {
+		if(this._threadPage == null) {
+			refreshThread();
+		}
+		return this._forumId;
+	}
 	
 	/**
 	 * @return Get a Member class of the Author of the thread.
 	 */
-	public String getAuthor() { return this._author; }
+	public String getAuthor() {
+		if(this._threadPage == null) {
+			refreshThread();
+		}
+		return this._author;
+	}
 	
 	/**
 	 * @return Returns the title of the thread.
 	 */
-	public String getTitle() { return this._title; }
+	public String getTitle() {
+		if(this._title == null) {
+			refreshThread();
+		}
+		return this._title;
+	}
 	
 	/**
 	 * @return Returns the number of replies to the thread. Also is the id of the last post.
 	 */
-	public int getRepliesCount() { return this._replies; }
+	public int getRepliesCount() {
+		if(this._threadPage == null) {
+			refreshThread();
+		}
+		return this._replies;
+	}
 	
 	/**
 	 * @return Returns the number of people who added this thread to their favourites.
 	 */
-	public int getFavouritesCount() { return this._favourites; }
+	public int getFavouritesCount() {
+		if(this._threadPage == null) {
+			refreshThread();
+		}
+		return this._favourites;
+	}
 	
 	/**
 	 * @return Returns the number of pages of the thread.
 	 */
-	public int getPageCount() { return this._pageCount; }
+	public int getPageCount() {
+		if(this._threadPage == null) {
+			refreshThread();
+		}
+		return this._pageCount;
+	}
 	
 	/**
 	 * @return Returns the forum's name without the need of call the method Forum.getName()
 	 */
-	public String getForumName() { return this._forumName; }
+	public String getForumName() {
+		if(this._forumName == null) {
+			refreshThread();
+		}
+		return this._forumName;
+	}
 	
 	/**
 	 * This method retrieves posts among different pages.
@@ -183,6 +228,9 @@ public class Thread {
 	private void updateCategory() { }		//TODO
 	
 	private void updateAuthor() {
+		if(this._threadPage == null) {
+			updatePages();
+		}
 		Matcher m = getMatcher("<dt><a href=\"/id/([^\"]+)\" style", this._threadPage);
 		if(m.find()) {
 			this._author = m.group(1);
@@ -190,6 +238,9 @@ public class Thread {
 	}
 	
 	private void updateForumName() {
+		if(this._threadPage == null) {
+			updatePages();
+		}
 		String regex = "<a href=\"/foro/" + this._forumId + "\">(.*)</a>";
 		Matcher m = Pattern.compile(regex).matcher(this._threadPage);
 		if(m.find()) {
@@ -198,6 +249,9 @@ public class Thread {
 	}
 	
 	private void updateTitle() {
+		if(this._threadPage == null) {
+			updatePages();
+		}
 		Matcher m = getMatcher("<title>([^&]*)&bull;", this._threadPage);
 		if(m.find()) {
 			this._title = m.group(1).trim();
@@ -205,6 +259,9 @@ public class Thread {
 	}
 	
 	private void updatePagesCount() {
+		if(this._threadPage == null) {
+			updatePages();
+		}
 		Matcher m = getMatcher("class=\"last\">([0-9]*)</a>", this._threadPage);
 		if(m.find()) {
 			this._pageCount = Integer.parseInt(m.group(1));
@@ -214,6 +271,9 @@ public class Thread {
 	}
 	
 	private void updateReplies() {
+		if(this._threadPage == null) {
+			updatePages();
+		}
 		Matcher m = getMatcher("<div class=\"info\"><a href=\"#([0-9]*)\"", this._threadLastPage);
 		int lastReply = 0;
 		while(m.find() == true) {
@@ -223,6 +283,9 @@ public class Thread {
 	}
 	
 	private void updateFavourites() {
+		if(this._threadPage == null) {
+			updatePages();
+		}
 		Matcher m = getMatcher("<div class=\"favcount\">([0-9]{1,})</div>", this._threadPage);
 		if(m.find()) {
 			this._favourites = Integer.parseInt(m.group(1));
@@ -230,6 +293,9 @@ public class Thread {
 	}
 	
 	private void getIds() {
+		if(this._threadPage == null) {
+			updatePages();
+		}
 		Matcher m;
 		m = getMatcher("\"/foro/([0-9]+)\">", this._threadPage);
 		if(m.find()) {
@@ -252,6 +318,9 @@ public class Thread {
 	}
 	
 	private void updateTimestamp() {
+		if(this._threadPage == null) {
+			updatePages();
+		}		
 		Matcher m;
 		m = getMatcher("#1</a> <span>[^0-9]*([^<]+)</span>", this._threadPage);
 		if(m.find()) {

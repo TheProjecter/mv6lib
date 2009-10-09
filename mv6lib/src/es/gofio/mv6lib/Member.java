@@ -75,37 +75,70 @@ public class Member {
 	/**
 	 * @return Returns the ID of the member.
 	 */
-	public String getId() { return this._id; }
+	public String getId() {
+		if(this._id == null) {
+			refreshMember();
+		}
+		return this._id;
+	}
 	
 	/**
 	 * @return Returns the nick of the member (same as the ID).
 	 */
-	public String getNick() { return this._nick; }
+	public String getNick() {
+		if(this._nick == null) {
+			refreshMember();
+		}
+		return this._nick;
+	}
 	
 	/**
 	 * @return Returns true if the member is online.
 	 */
-	public boolean isConnected() { return this._connected; }
+	public boolean isConnected() {
+		if(this._page == null) {
+			refreshMember();
+		}
+		return this._connected;
+	}
 	
 	/**
 	 * @return Returns the full url of the member's avatar.
 	 */
-	public String getAvatar() { return this._avatar; }
+	public String getAvatar() {
+		if(this._avatar == null) {
+			refreshMember();
+		}
+		return this._avatar;
+	}
 	
 	/**
 	 * @return Returns the full url of the member's photo.
 	 */
-	public String getPhoto() { return this._photo; }
+	public String getPhoto() {
+		if(this._photo == null) {
+			refreshMember();
+		}
+		return this._photo;
+	}
 	
 	/**
 	 * @return Returns the current counter of the member's signatures.
 	 */
-	public int getSignaturesCount() { return this._signatures; }
+	public int getSignaturesCount() {
+		if(this._page == null) {
+			refreshMember();
+		}
+		return this._signatures;
+	}
 	
 	/**
 	 * @return Returns the quantity of posts the member wrote.
 	 */
 	public int getPosts() {
+		if(this._page == null) {
+			refreshMember();
+		}
 		return this._posts;
 	}
 	
@@ -113,6 +146,9 @@ public class Member {
 	 * @return Returns the visits quantity of the member.
 	 */
 	public int getVisits() {
+		if(this._page == null) {
+			refreshMember();
+		}
 		return this._visits;
 	}
 	
@@ -120,6 +156,9 @@ public class Member {
 	 * @return Returns the age of the member.
 	 */
 	public int getAge() {
+		if(this._page == null) {
+			refreshMember();
+		}
 		return this._age;
 	}
 	
@@ -127,6 +166,9 @@ public class Member {
 	 * @return Returns the name of the member.
 	 */
 	public String getName() {
+		if(this._name == null) {
+			refreshMember();
+		}
 		return this._name;
 	}
 	
@@ -134,6 +176,9 @@ public class Member {
 	 * @return Returns where the member lives.
 	 */
 	public String getCity() {
+		if(this._city == null) {
+			refreshMember();
+		}
 		return this._city;
 	}
 	
@@ -141,6 +186,9 @@ public class Member {
 	 * @return Returns the timestamp of the member's register.
 	 */
 	public long getRegisteredTimestamp() {
+		if(this._page == null) {
+			refreshMember();
+		}
 		return this._registeredTimestamp;
 	}
 	
@@ -148,6 +196,9 @@ public class Member {
 	 * @return Returns a Vector<String> of the last visitors of the member.
 	 */
 	public Vector<String> getLastVisitors() {
+		if(this._page == null) {
+			refreshMember();
+		}
 		return this._lastVisitors;
 	}
 	
