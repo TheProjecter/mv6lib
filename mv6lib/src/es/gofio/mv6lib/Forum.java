@@ -36,6 +36,8 @@ public class Forum {
 	private String			_name;
 	private String			_page;
 	private Vector<Thread>	_lastThreads = new Vector<Thread>();
+	private int				_postsCounter;
+	private int				_threadsCounter;
 	
 	/**
 	 * Constructor of the class.
@@ -81,6 +83,26 @@ public class Forum {
 	}
 	
 	/**
+	 * @return Returns the counter of threads
+	 */
+	public int getThreadsCounter() {
+		if(this._threadsCounter == -1) {
+//			refreshForum();
+		}
+		return this._threadsCounter;
+	}
+	
+	/**
+	 * @return Returns the counter of posts
+	 */
+	public int getPostsCounter() {
+		if(this._postsCounter == -1) {
+//			refreshForum();
+		}
+		return this._postsCounter;
+	}
+	
+	/**
 	 * Forces the class to refresh the content.
 	 */
 	public void refreshForum() {
@@ -98,12 +120,18 @@ public class Forum {
 	}
 	
 	private void setLastThreads() {
-		// <a id='a363482' class="hb" title='ÀCu‡ndo podremos crear grupos?'
 		String regex = "<a id='a([0-9]*)' class=\"hb\" title='([^\']*)'";
 		Matcher m = Pattern.compile(regex).matcher(this._page);
 		while(m.find()) {
-//			System.out.println(m.group(1) + " " + m.group(2));
 			_lastThreads.add(new Thread(Integer.parseInt(m.group(1)), m.group(2)));
 		}
+	}
+	
+	public void setPostsCounter(int counter) {
+		this._postsCounter = counter;
+	}
+	
+	public void setThreadsCounter(int counter) {
+		this._threadsCounter = counter;
 	}
 }

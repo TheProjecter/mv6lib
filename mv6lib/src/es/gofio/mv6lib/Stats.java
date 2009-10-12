@@ -9,6 +9,7 @@ http://www.gnu.org/licenses/lgpl.html
 */
 package es.gofio.mv6lib;
 
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,7 +37,8 @@ public class Stats {
 	private int		_members;
 	private int		_threads;
 	private int		_posts;
-	private String	_page;
+	private Vector<String>	_page = new Vector<String>();
+	private Vector<Forum> _forums = new Vector<Forum>();
 	
 	/**
 	 * Constructor of the class, you must call the updateStats() method to retrieve the stats.
@@ -102,6 +104,16 @@ public class Stats {
 	}
 	
 	/**
+	 * @return This method returns a Vector<Forum> with id, name, threads counter and posts counter.
+	 */
+	public Vector<Forum> getForumsWithCounters() {
+		if(this._forums.size() == 0) {
+//			updateStats();
+		}
+		return _forums;
+	}
+	
+	/**
 	 * This method tries to connect to the website and update all of the stats.
 	 */
 	public void updateStats() {
@@ -109,12 +121,18 @@ public class Stats {
 		updateTimestamp();
 		updateUsersOnline();
 		updateMembersCount();
-		updateThreadsCount();
-		updatePostsCount();
+		updateThreadsCounters();
 	}
 	
 	private void updatePage() {
-		this._page = Page.getPage("http://www.mediavida.com/foro/");
+		this._page.clear();
+		this._page.add(Page.getPage("http://www.mediavida.com/foro/"));
+		String regex = "<a href='/foro/([^']*)' class=\"hb\">[^<]*</a><br><span>[^<]*</span>		<!-- subforos -->";
+		Matcher m = Pattern.compile(regex).matcher(this._page.firstElement());
+		
+		while(m.find()) {
+			this._page.add(Page.getPage("http://www.mediavida.com/foro/" + m.group(1)));
+		}
 	}
 	
 	private void updateTimestamp() {
@@ -122,7 +140,7 @@ public class Stats {
 	}
 	
 	private boolean updateUsersOnline() {
-		Matcher m = getMatcher("OnLine: ([0-9]+)");
+		Matcher m = Pattern.compile("OnLine: ([0-9]+)").matcher(this._page.get(1));
 		if(m.find()) {
 			this._usersOnline = Integer.valueOf(m.group(1));
 			return true;
@@ -132,7 +150,7 @@ public class Stats {
 	}
 	
 	private boolean updateMembersCount() {
-		Matcher m = getMatcher("Miembros: ([0-9]+)");
+		Matcher m = Pattern.compile("Miembros: ([0-9]+)").matcher(this._page.get(1));
 		if(m.find()) {
 			this._members = Integer.valueOf(m.group(1));
 			return true;
@@ -141,29 +159,35 @@ public class Stats {
 		}
 	}
 	
-	private void updateThreadsCount() {
-		Matcher m = getMatcher("<td class=\"alt center\">([0-9]+)</td>");
-		int i = 0;
-		while(m.find()) {
-			i = i + Integer.valueOf(m.group(1));
+	private void updateThreadsCounters() {
+		for(int i = 0; i < this._page.size(); i++) {
+//			String regex = "<a href='/foro/([0-9]*)' class=\"hb\">([^<]*)</a><br><span>[^<]*</span>\t</td>\t \t<td class=\"alt center\">([0-9]*)</td>\t<td class=\"last center\">([0-9]*)</td>";
+			String regex = "<a href='/foro/([0-9]*)' class=\"hb\">([^<]*)</a><br><span>[^<]*</span>(\t\t[^\t]*\t[^\t]*\t[^\t]*)?\t</td>\t \t<td class=\"alt center\">([0-9]*)</td>\t<td class=\"last center\">([0-9]*)</td>";
+			Matcher m = Pattern.compile(regex).matcher(this._page.get(i));
+			while(m.find()) {
+				Forum f = new Forum(Integer.parseInt(m.group(1)), m.group(2));
+				f.setThreadsCounter(Integer.parseInt(m.group(4)));
+				f.setPostsCounter(Integer.parseInt(m.group(5)));
+				_forums.add(f);
+			}
+			regex = "<strong><a href='/foro/([0-9]*)'>([^<]*)</a></strong><br><span>[^<]*</span></td>\t\t<td class=\"alt\">([0-9]*)</td>\t\t<td class=\"last\">([0-9]*)</td></tr>";
+			m = Pattern.compile(regex).matcher(this._page.get(i));
+			while(m.find()) {
+				Forum f = new Forum(Integer.parseInt(m.group(1)), m.group(2));
+				f.setThreadsCounter(Integer.parseInt(m.group(3)));
+				f.setPostsCounter(Integer.parseInt(m.group(4)));
+				_forums.add(f);
+			}
 		}
-		this._threads = 0;
-		this._threads = i;
-	}
-	
-	private void updatePostsCount() {
-		Matcher m = getMatcher("<td class=\"last center\">([0-9]+)</td");
-		int i = 0;
-		while(m.find()) {
-			i = i + Integer.valueOf(m.group(1));
+		
+		int totalThreadsCounter = 0;
+		int totalPostsCounter = 0;
+		for(int i = 0; i < this._forums.size(); i++) {
+			totalThreadsCounter += _forums.get(i).getThreadsCounter();
+			totalPostsCounter += _forums.get(i).getPostsCounter();
 		}
-		this._posts = 0;
-		this._posts = i;		
-	}
-	
-	private Matcher getMatcher(String regex) {
-		Pattern p = Pattern.compile(regex);
-		Matcher m = p.matcher(this._page);
-		return m;
+		
+		this._threads = totalThreadsCounter;
+		this._posts = totalPostsCounter;
 	}
 }

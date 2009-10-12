@@ -44,7 +44,7 @@ public class ForumList {
 	 */
 	public Vector<Forum> getForumList() {
 		if(this._page == null) {
-			updateForumList();
+			refreshForumList();
 		}
 		return this._forumList;
 	}
