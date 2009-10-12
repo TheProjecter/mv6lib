@@ -160,6 +160,7 @@ public class Stats {
 	}
 	
 	private void updateThreadsCounters() {
+		_forums.clear();
 		for(int i = 0; i < this._page.size(); i++) {
 //			String regex = "<a href='/foro/([0-9]*)' class=\"hb\">([^<]*)</a><br><span>[^<]*</span>\t</td>\t \t<td class=\"alt center\">([0-9]*)</td>\t<td class=\"last center\">([0-9]*)</td>";
 			String regex = "<a href='/foro/([0-9]*)' class=\"hb\">([^<]*)</a><br><span>[^<]*</span>(\t\t[^\t]*\t[^\t]*\t[^\t]*)?\t</td>\t \t<td class=\"alt center\">([0-9]*)</td>\t<td class=\"last center\">([0-9]*)</td>";
